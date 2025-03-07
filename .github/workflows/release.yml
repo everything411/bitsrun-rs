@@ -83,7 +83,7 @@ jobs:
           done
 
       - name: Install musl development files
-        if: endsWith(matrix.target, '-musl')
+        if: endsWith(matrix.target, '-musl') || endsWith(matrix.target, '-musleabi')
         run: |
           sudo apt-get -yq update
           sudo apt-get -yq install musl-tools musl-dev:${{ matrix.target-apt-arch }}
