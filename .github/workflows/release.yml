@@ -30,6 +30,7 @@ jobs:
           - i686-pc-windows-msvc
           - x86_64-apple-darwin
           - aarch64-apple-darwin
+          - arm-unknown-linux-musleabi
 
         include:
           - target: x86_64-unknown-linux-gnu
@@ -44,6 +45,9 @@ jobs:
           - target: aarch64-unknown-linux-musl
             os: ubuntu-22.04
             target-apt-arch: arm64
+          - target: arm-unknown-linux-musleabi
+            os: ubuntu-22.04
+            target-apt-arch: armel
           - target: x86_64-pc-windows-msvc
             os: windows-latest
           - target: i686-pc-windows-msvc
@@ -91,6 +95,12 @@ jobs:
           # libc6 must be present to run executables dynamically linked
           # against glibc for the target architecture
           sudo apt-get -yq install qemu-user crossbuild-essential-arm64 libc6:arm64
+
+      - name: Install QEMU and armeabi cross compiler
+        if: startsWith(matrix.target, 'arm-unknown-linux')
+        run: |
+          sudo apt-get -yq update
+          sudo apt-get -yq install qemu-user crossbuild-essential-armel
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
